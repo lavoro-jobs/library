@@ -1,36 +1,23 @@
 image: python:latest
 
 stages:
-  - test
-  - build
-  - publish  # Add the "publish" stage here
-
-variables:
-  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.pip_cache"
-
-before_script:
-  - pip install build twine
+  - validate
+  - publish
 
 build:
-  stage: build
+  stage: validate
   rules:
-    - if: $CI_COMMIT_TAG
-      when: never
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_PIPELINE_SOURCE == "push" # Build only when a new branch is pushed or an existing branch is updated
   script:
+    - pip install build
     - python -m build
-  only:
-    - merge_requests
 
 publish:
-  stage: publish  # Associate the "publish" job with the "publish" stage
+  stage: publish
   rules:
+    - if: $CI_PIPELINE_SOURCE == "web" # Publish only when the pipeline is created from a web request (merge request)
     - if: $CI_COMMIT_TAG
-      when: never
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-    - if: $CI_PIPELINE_SOURCE == "push"
   script:
+    - pip install build twine
     - TWINE_PASSWORD=${CI_JOB_TOKEN} TWINE_USERNAME=gitlab-ci-token python -m twine upload --repository-url ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi dist/*
-  only:
-    - master
