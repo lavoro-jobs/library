@@ -9,5 +9,6 @@ setup(name='lavoro-library',
       author='Lavoro Team',
       author_email='marko.bolt@fer.hr',
       license='MIT',
+      install_requires=['psycopg2-binary'],
       packages=['lavoro_library'],
       zip_safe=False)
