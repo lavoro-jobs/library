@@ -21,8 +21,13 @@ class Database:
     def execute_query(self, query, params=None):
         with self.connection.cursor() as cursor:
             cursor.execute(query, params)
-            result = cursor.fetchall()
-            return {"result": result, "affected_rows": cursor.rowcount}
+
+            # fetch result if query is a select
+            if cursor.description:
+                result = cursor.fetchall()
+                return {"result": result, "affected_rows": cursor.rowcount}
+            else:
+                return {"affected_rows": cursor.rowcount}
 
     def execute_query_batch(self, query, params=None):
         with self.connection.cursor() as cursor:
