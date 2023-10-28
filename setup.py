@@ -3,6 +3,7 @@ from setuptools import setup
 
 setup(name='lavoro-library',
       version=os.environ["CI_PIPELINE_IID"],
+      long_description="Shared library for Lavoro services",
       description='Shared library for Lavoro services',
       url='https://gitlab.com/rprojekt1/lavoro-library/',
       author='Lavoro Team',
