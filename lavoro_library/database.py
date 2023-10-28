@@ -2,6 +2,7 @@ import sys
 import time
 import psycopg2
 
+
 class Database:
     def __init__(self, connection_string):
         self.connection = self.connect(connection_string)
@@ -22,11 +23,9 @@ class Database:
             cursor.execute(query, params)
             result = cursor.fetchall()
             return {"result": result, "affected_rows": cursor.rowcount}
-    
+
     def execute_query_batch(self, query, params=None):
         with self.connection.cursor() as cursor:
             cursor.executemany(query, params)
             result = cursor.fetchall()
             return {"result": result, "affected_rows": cursor.rowcount}
-    
-
