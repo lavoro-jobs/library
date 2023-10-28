@@ -18,5 +18,3 @@ class Database:
         print("Unable to connect to config database")
         sys.exit(1)
 
-
-db = Database(os.environ.get("DB_CONNECTION_STRING"))
