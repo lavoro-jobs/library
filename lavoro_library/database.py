@@ -23,7 +23,6 @@ class Database:
         with self.connection.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cursor:
             cursor.execute(query, params)
 
-            # fetch result if query is a select
             if cursor.description:
                 result = cursor.fetchall()
                 return {"result": result, "affected_rows": cursor.rowcount}
@@ -32,6 +31,7 @@ class Database:
 
     def execute_query_batch(self, query, params=None):
         with self.connection.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cursor:
+            # TODO: handle returning results like in execute_query()
             cursor.executemany(query, params)
             result = cursor.fetchall()
             return {"result": result, "affected_rows": cursor.rowcount}
