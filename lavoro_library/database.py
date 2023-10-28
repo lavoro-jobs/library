@@ -1,6 +1,7 @@
 import sys
 import time
 import psycopg2
+import psycopg2.extras
 
 
 class Database:
