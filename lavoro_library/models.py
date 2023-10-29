@@ -1,7 +1,7 @@
-import datetime
+from datetime import datetime
 import uuid
 
-from typing import Annotated, Union
+from typing import Union
 from pydantic import BaseModel
 
 
