@@ -8,5 +8,5 @@ setup(name='lavoro-library',
       author='Lavoro Team',
       author_email='marko.bolt@fer.hr',
       license='MIT',
-      packages=['lavoro_library'],
+      packages=['lavoro_library', 'pydantic'],
       zip_safe=False)
