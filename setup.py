@@ -9,5 +9,9 @@ setup(name='lavoro-library',
       author='Lavoro Team',
       author_email='marko.bolt@fer.hr',
       license='MIT',
-      packages=['lavoro_library', 'pydantic'],
+      packages=['lavoro_library'],
+      install_requires=[
+            'pydantic',
+            'psycopg2-binary',
+      ],
       zip_safe=False)
