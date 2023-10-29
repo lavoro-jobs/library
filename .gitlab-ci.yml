@@ -1,25 +1,25 @@
 image: python:latest
 
 stages:
-  - validate
-  - publish
+    - validate
+    - publish
 
 build:
-  stage: validate
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-  script:
-    - pip install build
-    - python -m build
+    stage: validate
+    rules:
+        - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    script:
+        - pip install build
+        - python -m build
 
 publish:
-  stage: publish
-  rules:
-    - if: $CI_COMMIT_TAG
-      when: never                                  
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH  
-  script:
-    - pip install build twine
-    - python -m build
-    - TWINE_PASSWORD=${CI_JOB_TOKEN} TWINE_USERNAME=gitlab-ci-token twine check dist/*
-    - TWINE_PASSWORD=${CI_JOB_TOKEN} TWINE_USERNAME=gitlab-ci-token twine upload --repository-url ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi dist/*
+    stage: publish
+    rules:
+        - if: $CI_COMMIT_TAG
+          when: never
+        - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    script:
+        - pip install build twine
+        - python -m build
+        - TWINE_PASSWORD=${CI_JOB_TOKEN} TWINE_USERNAME=gitlab-ci-token twine check dist/*
+        - TWINE_PASSWORD=${CI_JOB_TOKEN} TWINE_USERNAME=gitlab-ci-token twine upload --repository-url ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi dist/*
