@@ -49,4 +49,3 @@ class WorkTypeCatalog(BaseModel):
 class SkillsCatalog(BaseModel):
     id: int
     skill_name: str
-
