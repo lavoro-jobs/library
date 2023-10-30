@@ -20,7 +20,7 @@ class Database:
         sys.exit(1)
 
     def execute_query(self, query, params=None):
-        with self.connection.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cursor:
+        with self.connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
             cursor.execute(query, params)
 
             if cursor.description:
