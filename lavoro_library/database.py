@@ -1,7 +1,10 @@
 import sys
 import time
-import psycopg2
-import psycopg2.extras
+
+from typing import List
+
+import psycopg
+from psycopg.rows import dict_row
 
 
 class Database:
@@ -9,29 +12,31 @@ class Database:
         self.connection = self.connect(connection_string)
 
     def connect(self, connection_string, max_retries=3):
-        for i in range(0, max_retries):
+        for _ in range(0, max_retries):
             try:
-                connection = psycopg2.connect(connection_string)
+                connection = psycopg.connect(connection_string, row_factory=dict_row, autocommit=True)
                 return connection
-            except psycopg2.OperationalError as e:
-                print("Unable to connect to config database. Retrying...")
+            except psycopg.OperationalError as e:
+                print("Unable to connect to database. Retrying...")
                 time.sleep(3)
-        print("Unable to connect to config database")
+        print("Unable to connect to database")
         sys.exit(1)
 
-    def execute_query(self, query, params=None):
-        with self.connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
-            cursor.execute(query, params)
+    def execute_one(self, query_tuple: tuple):
+        query, param_dict = query_tuple
 
-            if cursor.description:
-                result = cursor.fetchall()
-                return {"result": result, "affected_rows": cursor.rowcount}
-            else:
-                return {"affected_rows": cursor.rowcount}
+        cursor = self.connection.cursor()
+        cursor.execute(query, param_dict)
 
-    def execute_query_batch(self, query, params=None):
-        with self.connection.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cursor:
-            # TODO: handle returning results like in execute_query()
-            cursor.executemany(query, params)
+        if cursor.description is not None:
             result = cursor.fetchall()
             return {"result": result, "affected_rows": cursor.rowcount}
+        else:
+            return {"affected_rows": cursor.rowcount}
+
+    def execute_many(self, query_tuple_list: List[tuple]):
+        cursor = self.connection.cursor()
+        with self.connection.transaction():
+            for query, param_dict in query_tuple_list:
+                cursor.execute(query, param_dict)
+            return {"affected_rows": cursor.rowcount}
