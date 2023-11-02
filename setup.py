@@ -13,7 +13,7 @@ setup(
     packages=["lavoro_library"],
     install_requires=[
         "pydantic",
-        "psycopg-binary",
+        "psycopg",
     ],
     zip_safe=False,
 )
