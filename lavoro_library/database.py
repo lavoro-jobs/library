@@ -4,7 +4,7 @@ import time
 from typing import List
 
 import psycopg
-from psycopg.rows import dict_row  
+from psycopg.rows import dict_row
 
 
 class Database:
@@ -21,10 +21,10 @@ class Database:
                 time.sleep(3)
         print("Unable to connect to database")
         sys.exit(1)
-        
+
     def execute_one(self, query_tuple: tuple):
         query, param_dict = query_tuple
-        
+
         cursor = self.connection.cursor()
         cursor.execute(query, param_dict)
 
@@ -40,4 +40,3 @@ class Database:
             for query, param_dict in query_tuple_list:
                 cursor.execute(query, param_dict)
             return {"affected_rows": cursor.rowcount}
-
