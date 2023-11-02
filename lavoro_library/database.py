@@ -23,7 +23,7 @@ class Database:
         sys.exit(1)
 
     def execute_one(self, query_tuple: tuple):
-        query, param_dict = query_tuple
+        (query, param_dict) = query_tuple
 
         cursor = self.connection.cursor()
         cursor.execute(query, param_dict)
