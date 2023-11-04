@@ -14,6 +14,7 @@ setup(
     install_requires=[
         "pydantic[email]",
         "psycopg",
+        "python-multipart",
     ],
     zip_safe=False,
 )
