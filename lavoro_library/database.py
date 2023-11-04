@@ -40,11 +40,13 @@ class Database:
 
     def execute_many(self, query_tuple_list: List[tuple]):
         try:
+            total_affected_rows = 0
             cursor = self.connection.cursor()
             with self.connection.transaction():
                 for query, param_dict in query_tuple_list:
                     cursor.execute(query, param_dict)
-                return {"affected_rows": cursor.rowcount}
+                    total_affected_rows += cursor.rowcount
+                return {"affected_rows": total_affected_rows}
         except psycopg.Error as e:
             print(e)
             return {"affected_rows": 0}
