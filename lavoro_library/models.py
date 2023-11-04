@@ -1,3 +1,4 @@
+import inspect
 import uuid
 
 from datetime import datetime
@@ -8,25 +9,37 @@ from fastapi import Form
 from pydantic import BaseModel, EmailStr, SecretStr
 
 
+def as_form(cls):
+    new_params = [
+        inspect.Parameter(
+            field_name,
+            inspect.Parameter.POSITIONAL_ONLY,
+            default=model_field.default,
+            annotation=Annotated[model_field.annotation, model_field.metadata, Form()],
+        )
+        for field_name, model_field in cls.model_fields.items()
+    ]
+
+    cls.__signature__ = cls.__signature__.replace(parameters=new_params)
+
+    return cls
+
 
 class Role(str, Enum):
     applicant = "applicant"
     employer = "employer"
 
 
+@as_form
 class RegistrationForm(BaseModel):
     email: Annotated[EmailStr, Form()]
     password: Annotated[SecretStr, Form()]
     role: Annotated[Role, Form()]
 
-    @classmethod
-    def as_form(
-        cls,
-        email: EmailStr = Form(...),
-        password: SecretStr = Form(...),
-        role: Role = Form(...),
-    ):
-        return cls(email, password, role)
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
 
 
 class Token(BaseModel):
