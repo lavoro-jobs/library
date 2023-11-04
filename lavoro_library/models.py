@@ -6,7 +6,7 @@ from enum import Enum
 from typing import Annotated, Union
 
 from fastapi import Form
-from pydantic import BaseModel, EmailStr, SecretStr
+from pydantic import BaseModel, EmailStr
 
 
 def as_form(cls):
@@ -33,7 +33,7 @@ class Role(str, Enum):
 @as_form
 class RegistrationForm(BaseModel):
     email: Annotated[EmailStr, Form()]
-    password: Annotated[SecretStr, Form()]
+    password: Annotated[str, Form()]
     role: Annotated[Role, Form()]
     
 
