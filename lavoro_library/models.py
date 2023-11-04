@@ -2,9 +2,11 @@ import uuid
 
 from datetime import datetime
 from enum import Enum
-from typing import Union
+from typing import Annotated, Union
 
+from fastapi import Form
 from pydantic import BaseModel, EmailStr, SecretStr
+
 
 
 class Role(str, Enum):
@@ -13,9 +15,9 @@ class Role(str, Enum):
 
 
 class RegistrationForm(BaseModel):
-    email: EmailStr
-    password: SecretStr
-    role: Role
+    email: Annotated[EmailStr, Form()]
+    password: Annotated[SecretStr, Form()]
+    role: Annotated[Role, Form()]
 
 
 class Token(BaseModel):
