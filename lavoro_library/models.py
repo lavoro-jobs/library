@@ -1,8 +1,21 @@
-from datetime import datetime
 import uuid
 
+from datetime import datetime
+from enum import Enum
 from typing import Union
-from pydantic import BaseModel
+
+from pydantic import BaseModel, EmailStr, SecretStr
+
+
+class Role(str, Enum):
+    applicant = "applicant"
+    employer = "employer"
+
+
+class RegistrationForm(BaseModel):
+    email: EmailStr
+    password: SecretStr
+    role: Role
 
 
 class Token(BaseModel):
