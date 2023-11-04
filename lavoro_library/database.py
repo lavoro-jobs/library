@@ -23,20 +23,28 @@ class Database:
         sys.exit(1)
 
     def execute_one(self, query_tuple: tuple):
-        (query, param_dict) = query_tuple
+        try:
+            (query, param_dict) = query_tuple
 
-        cursor = self.connection.cursor()
-        cursor.execute(query, param_dict)
+            cursor = self.connection.cursor()
+            cursor.execute(query, param_dict)
 
-        if cursor.description is not None:
-            result = cursor.fetchall()
-            return {"result": result, "affected_rows": cursor.rowcount}
-        else:
-            return {"affected_rows": cursor.rowcount}
+            if cursor.description is not None:
+                result = cursor.fetchall()
+                return {"result": result, "affected_rows": cursor.rowcount}
+            else:
+                return {"affected_rows": cursor.rowcount}
+        except psycopg.Error as e:
+            print(e)
+            return {"result": None, "affected_rows": 0}
 
     def execute_many(self, query_tuple_list: List[tuple]):
-        cursor = self.connection.cursor()
-        with self.connection.transaction():
-            for query, param_dict in query_tuple_list:
-                cursor.execute(query, param_dict)
-            return {"affected_rows": cursor.rowcount}
+        try:
+            cursor = self.connection.cursor()
+            with self.connection.transaction():
+                for query, param_dict in query_tuple_list:
+                    cursor.execute(query, param_dict)
+                return {"affected_rows": cursor.rowcount}
+        except psycopg.Error as e:
+            print(e)
+            return {"affected_rows": 0}
