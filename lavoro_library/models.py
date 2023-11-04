@@ -19,6 +19,15 @@ class RegistrationForm(BaseModel):
     password: Annotated[SecretStr, Form()]
     role: Annotated[Role, Form()]
 
+    @classmethod
+    def as_form(
+        cls,
+        email: EmailStr = Form(...),
+        password: SecretStr = Form(...),
+        role: Role = Form(...),
+    ):
+        return cls(email, password, role)
+
 
 class Token(BaseModel):
     access_token: str
