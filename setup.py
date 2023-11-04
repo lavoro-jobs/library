@@ -12,7 +12,7 @@ setup(
     license="MIT",
     packages=["lavoro_library"],
     install_requires=[
-        "pydantic",
+        "pydantic[email]",
         "psycopg",
     ],
     zip_safe=False,
