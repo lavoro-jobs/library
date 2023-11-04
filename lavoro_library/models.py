@@ -35,12 +35,7 @@ class RegistrationForm(BaseModel):
     email: Annotated[EmailStr, Form()]
     password: Annotated[SecretStr, Form()]
     role: Annotated[Role, Form()]
-
-
-class Token(BaseModel):
-    access_token: str
-    token_type: str
-
+    
 
 class Token(BaseModel):
     access_token: str
