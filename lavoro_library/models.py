@@ -40,7 +40,7 @@ class RegistrationForm(BaseModel):
 @as_form
 class LoginForm(BaseModel):
     grant_type: Annotated[Union[str, None], Form(pattern="password")] = None
-    username: Annotated[EmailStr, Form()]
+    username: Annotated[str, Form()]
     password: Annotated[str, Form()]
     scope: Annotated[str, Form()] = ""
     client_id: Annotated[Union[str, None], Form()] = None
