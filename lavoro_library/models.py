@@ -134,5 +134,5 @@ class Experience(BaseModel):
     applicant_profile_id: uuid.UUID
 
 
-class ApplicantProfileResponse(ApplicantProfile):
+class ApplicantProfileDto(ApplicantProfile):
     experiences: List[Experience] = []
