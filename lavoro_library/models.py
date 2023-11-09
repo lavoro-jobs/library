@@ -141,5 +141,32 @@ class ExperienceDto(BaseModel):
     years: int
 
 
+class CreateExperienceRequest(BaseModel):
+    company_name: str
+    position_id: uuid.UUID
+    years: int
+
+
+class CreateApplicantProfileRequest(BaseModel):
+    first_name: str
+    last_name: str
+    education_level_id: uuid.UUID
+    age: int
+    gender: Gender
+    skills_id: uuid.UUID
+    account_id: uuid.UUID
+    cv_url: str
+    work_type_id: uuid.UUID
+    seniority_level: int
+    position_id: uuid.UUID
+    home_location: Point
+    work_location_max_distance: int
+    contract_type_id: uuid.UUID
+    min_salary: float
+    experiences: List[CreateExperienceRequest] = []
+
+
 class ApplicantProfileDto(ApplicantProfile):
     experiences: List[ExperienceDto] = []
+
+
