@@ -134,5 +134,12 @@ class Experience(BaseModel):
     applicant_profile_id: uuid.UUID
 
 
+class ExperienceDto(BaseModel):
+    id: uuid.UUID
+    company_name: str
+    position_id: uuid.UUID
+    years: int
+
+
 class ApplicantProfileDto(ApplicantProfile):
-    experiences: List[Experience] = []
+    experiences: List[ExperienceDto] = []
