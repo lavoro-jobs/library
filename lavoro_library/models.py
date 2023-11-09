@@ -35,7 +35,17 @@ class RegistrationForm(BaseModel):
     email: Annotated[EmailStr, Form()]
     password: Annotated[str, Form()]
     role: Annotated[Role, Form()]
-    
+
+
+@as_form
+class LoginForm(BaseModel):
+    grant_type: Annotated[Union[str, None], Form(pattern="password")] = None
+    username: Annotated[str, Form()]
+    password: Annotated[str, Form()]
+    scope: Annotated[str, Form()] = ""
+    client_id: Annotated[Union[str, None], Form()] = None
+    client_secret: Annotated[Union[str, None], Form()] = None
+
 
 class Token(BaseModel):
     access_token: str
