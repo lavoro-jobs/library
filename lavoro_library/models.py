@@ -3,10 +3,10 @@ import uuid
 
 from datetime import datetime
 from enum import Enum
-from typing import Annotated, Union
+from typing import Annotated, Union, List
 
 from fastapi import Form
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, validator, ValidationError
 
 
 def as_form(cls):
@@ -35,7 +35,7 @@ class RegistrationForm(BaseModel):
     email: Annotated[EmailStr, Form()]
     password: Annotated[str, Form()]
     role: Annotated[Role, Form()]
-    
+
 
 class Token(BaseModel):
     access_token: str
@@ -81,3 +81,58 @@ class WorkTypeCatalog(BaseModel):
 class SkillsCatalog(BaseModel):
     id: int
     skill_name: str
+
+
+class Point(BaseModel):
+    x: float
+    y: float
+
+    @classmethod
+    def from_string(cls, s: str):
+        x, y = s.strip('()').split(',')
+        return cls(x=float(x), y=float(y))
+
+
+class Gender(str, Enum):
+    male = "male"
+    female = "female"
+    other = "gay"
+
+
+class ApplicantProfile(BaseModel):
+    id: uuid.UUID
+    first_name: str
+    last_name: str
+    education_level_id: uuid.UUID
+    age: int
+    gender: Gender
+    skills_id: uuid.UUID
+    account_id: uuid.UUID
+    cv_url: str
+    work_type_id: uuid.UUID
+    seniority_level: int
+    position_id: uuid.UUID
+    home_location: Point
+    work_location_max_distance: int
+    contract_type_id: uuid.UUID
+    min_salary: float
+
+    @validator('home_location', pre=True)
+    def parse_point(cls, value):
+        if isinstance(value, str):
+            return Point.from_string(value)
+        elif isinstance(value, dict):
+            return Point(**value)
+        raise ValidationError(f'Invalid input for a Point: {value}')
+
+
+class Experience(BaseModel):
+    id: uuid.UUID
+    company_name: str
+    position_id: uuid.UUID
+    years: int
+    applicant_profile_id: uuid.UUID
+
+
+class ApplicantProfileResponse(ApplicantProfile):
+    experiences: List[Experience] = []
