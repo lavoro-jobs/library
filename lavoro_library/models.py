@@ -103,18 +103,18 @@ class ApplicantProfile(BaseModel):
     id: uuid.UUID
     first_name: str
     last_name: str
-    education_level_id: uuid.UUID
+    education_level_id: int
     age: int
     gender: Gender
-    skills_id: uuid.UUID
+    skills_id: List[int]
     account_id: uuid.UUID
     cv_url: str
-    work_type_id: uuid.UUID
+    work_type_id: int
     seniority_level: int
-    position_id: uuid.UUID
+    position_id: int
     home_location: Point
     work_location_max_distance: int
-    contract_type_id: uuid.UUID
+    contract_type_id: int
     min_salary: float
 
     @validator('home_location', pre=True)
@@ -129,7 +129,7 @@ class ApplicantProfile(BaseModel):
 class Experience(BaseModel):
     id: uuid.UUID
     company_name: str
-    position_id: uuid.UUID
+    position_id: int
     years: int
     applicant_profile_id: uuid.UUID
 
@@ -137,31 +137,31 @@ class Experience(BaseModel):
 class ExperienceDto(BaseModel):
     id: uuid.UUID
     company_name: str
-    position_id: uuid.UUID
+    position_id: int
     years: int
 
 
 class CreateExperienceRequest(BaseModel):
     company_name: str
-    position_id: uuid.UUID
+    position_id: int
     years: int
 
 
 class CreateApplicantProfileRequest(BaseModel):
     first_name: str
     last_name: str
-    education_level_id: uuid.UUID
+    education_level_id: int
     age: int
     gender: Gender
-    skills_id: uuid.UUID
+    skills_id: List[int]
     account_id: uuid.UUID
     cv_url: str
-    work_type_id: uuid.UUID
+    work_type_id: int
     seniority_level: int
-    position_id: uuid.UUID
+    position_id: int
     home_location: Point
     work_location_max_distance: int
-    contract_type_id: uuid.UUID
+    contract_type_id: int
     min_salary: float
     experiences: List[CreateExperienceRequest] = []
 
