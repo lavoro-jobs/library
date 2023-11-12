@@ -1,1 +1,2 @@
-pip install pydantic[email] psycopg python-multipart
+pip install pydantic[email] psycopg[binary] python-multipart
+apk add libpq
