@@ -3,10 +3,10 @@ import uuid
 
 from datetime import datetime
 from enum import Enum
-from typing import Annotated, Union, List
+from typing import Annotated, List, Union
 
 from fastapi import Form
-from pydantic import BaseModel, EmailStr, validator, ValidationError
+from pydantic import BaseModel, EmailStr, ValidationError, validator
 
 
 def as_form(cls):
@@ -96,10 +96,10 @@ class Point(BaseModel):
 class Gender(str, Enum):
     male = "male"
     female = "female"
-    other = "gay"
+    other = "other"
 
 
-class ApplicantProfile(BaseModel):
+class ApplicantProfileInDB(BaseModel):
     id: uuid.UUID
     first_name: str
     last_name: str
@@ -126,7 +126,7 @@ class ApplicantProfile(BaseModel):
         raise ValidationError(f'Invalid input for a Point: {value}')
 
 
-class Experience(BaseModel):
+class ExperienceInDB(BaseModel):
     id: uuid.UUID
     company_name: str
     position_id: int
@@ -134,7 +134,7 @@ class Experience(BaseModel):
     applicant_profile_id: uuid.UUID
 
 
-class ExperienceDto(BaseModel):
+class Experience(BaseModel):
     id: uuid.UUID
     company_name: str
     position_id: int
@@ -166,7 +166,5 @@ class CreateApplicantProfileRequest(BaseModel):
     experiences: List[CreateExperienceRequest] = []
 
 
-class ApplicantProfileDto(ApplicantProfile):
-    experiences: List[ExperienceDto] = []
-
-
+class ApplicantProfile(ApplicantProfileInDB):
+    experiences: List[Experience] = []
