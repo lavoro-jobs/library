@@ -94,13 +94,13 @@ class SkillsCatalog(BaseModel):
 
 
 class Point(BaseModel):
-    x: float
-    y: float
+    longitude: float
+    latitude: float
 
     @classmethod
     def from_string(cls, s: str):
-        x, y = s.strip('()').split(',')
-        return cls(x=float(x), y=float(y))
+        longitude, latitude = s.strip("()").split(",")
+        return cls(x=float(longitude), y=float(latitude))
 
 
 class Gender(str, Enum):
@@ -120,20 +120,20 @@ class ApplicantProfileInDB(BaseModel):
     account_id: uuid.UUID
     cv_url: str
     work_type_id: int
-    seniority_level: int
+    seniority_level_id: int
     position_id: int
     home_location: Point
     work_location_max_distance: int
     contract_type_id: int
     min_salary: float
 
-    @validator('home_location', pre=True)
+    @validator("home_location", pre=True)
     def parse_point(cls, value):
         if isinstance(value, str):
             return Point.from_string(value)
         elif isinstance(value, dict):
             return Point(**value)
-        raise ValidationError(f'Invalid input for a Point: {value}')
+        raise ValidationError(f"Invalid input for a Point: {value}")
 
 
 class ExperienceInDB(BaseModel):
@@ -164,10 +164,9 @@ class CreateApplicantProfileRequest(BaseModel):
     age: int
     gender: Gender
     skills_id: List[int]
-    account_id: uuid.UUID
     cv_url: str
     work_type_id: int
-    seniority_level: int
+    seniority_level_id: int
     position_id: int
     home_location: Point
     work_location_max_distance: int
