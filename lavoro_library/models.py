@@ -27,7 +27,7 @@ def as_form(cls):
 
 class Role(str, Enum):
     applicant = "applicant"
-    company = "company"
+    recruiter = "recruiter"
 
 
 @as_form
