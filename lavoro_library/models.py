@@ -1,12 +1,13 @@
+import base64
 import inspect
 import uuid
 
 from datetime import datetime
 from enum import Enum
-from typing import Annotated, List, Union
+from typing import Annotated, List, Optional, Union
 
 from fastapi import Form
-from pydantic import BaseModel, EmailStr, ValidationError, validator
+from pydantic import BaseModel, EmailStr, field_serializer, model_validator
 
 
 def as_form(cls):
@@ -68,45 +69,88 @@ class UserInDB(User):
     created_on: datetime
 
 
-class PositionCatalog(BaseModel):
-    id: int
+class Position(BaseModel):
     position_name: str
 
 
-class EducationCatalog(BaseModel):
+class PositionInDB(Position):
     id: int
+
+
+class Education(BaseModel):
     education_level: str
 
 
-class ContractTypeCatalog(BaseModel):
+class EducationInDB(Education):
     id: int
+
+
+class ContractType(BaseModel):
     contract_type: str
 
 
-class WorkTypeCatalog(BaseModel):
+class ContractTypeInDB(ContractType):
     id: int
+
+
+class WorkType(BaseModel):
     work_type: str
 
 
-class SkillsCatalog(BaseModel):
+class WorkTypeInDB(WorkType):
     id: int
+
+
+class Skill(BaseModel):
     skill_name: str
+
+
+class SkillInDB(Skill):
+    id: int
 
 
 class Point(BaseModel):
     longitude: float
     latitude: float
 
-    @classmethod
-    def from_string(cls, s: str):
-        longitude, latitude = s.strip("()").split(",")
-        return cls(x=float(longitude), y=float(latitude))
+    @model_validator(mode="before")
+    def parse_point_string(cls, data):
+        if isinstance(data, str):
+            # Assuming the format is "(longitude,latitude)"
+            data = data.strip("()")
+            longitude, latitude = map(float, data.split(","))
+            return {'longitude': longitude, 'latitude': latitude}
+        return data
 
 
 class Gender(str, Enum):
     male = "male"
     female = "female"
     other = "other"
+
+
+class Experience(BaseModel):
+    id: uuid.UUID
+    company_name: str
+    position_id: int
+    years: int
+
+
+class ApplicantProfile(BaseModel):
+    first_name: str
+    last_name: str
+    education_level: str
+    age: int
+    gender: Gender
+    skills: List[str]
+    experiences: Optional[List[Experience]] = []
+    work_type: str
+    seniority_level: str  # TODO: add this catalog #PROJR-60
+    position: str
+    home_location: Point
+    work_location_max_distance: int
+    contract_type: str
+    min_salary: float
 
 
 class ApplicantProfileInDB(BaseModel):
@@ -116,24 +160,24 @@ class ApplicantProfileInDB(BaseModel):
     education_level_id: int
     age: int
     gender: Gender
-    skills_id: List[int]
+    skill_id_list: List[int]
+    experiences: Optional[List[Experience]] = []
     account_id: uuid.UUID
-    cv_url: str
+    cv: Union[bytes, None] = None
     work_type_id: int
-    seniority_level_id: int
+    seniority_level_id: int  # TODO: add this catalog #PROJR-60
     position_id: int
     home_location: Point
     work_location_max_distance: int
     contract_type_id: int
     min_salary: float
 
-    @validator("home_location", pre=True)
-    def parse_point(cls, value):
-        if isinstance(value, str):
-            return Point.from_string(value)
-        elif isinstance(value, dict):
-            return Point(**value)
-        raise ValidationError(f"Invalid input for a Point: {value}")
+    @field_serializer("cv")
+    @classmethod
+    def serialize_cv(cls, cv):
+        if cv:
+            encoded_file_content = base64.b64encode(cv).decode("utf-8")
+            return encoded_file_content
 
 
 class ExperienceInDB(BaseModel):
@@ -142,13 +186,6 @@ class ExperienceInDB(BaseModel):
     position_id: int
     years: int
     applicant_profile_id: uuid.UUID
-
-
-class Experience(BaseModel):
-    id: uuid.UUID
-    company_name: str
-    position_id: int
-    years: int
 
 
 class CreateExperienceRequest(BaseModel):
@@ -163,10 +200,10 @@ class CreateApplicantProfileRequest(BaseModel):
     education_level_id: int
     age: int
     gender: Gender
-    skills_id: List[int]
-    cv_url: str
+    skill_id_list: List[int]
+    cv: Union[bytes, None] = None
     work_type_id: int
-    seniority_level_id: int
+    seniority_level_id: int  # TODO: add this catalog #PROJR-60
     position_id: int
     home_location: Point
     work_location_max_distance: int
@@ -174,6 +211,67 @@ class CreateApplicantProfileRequest(BaseModel):
     min_salary: float
     experiences: List[CreateExperienceRequest] = []
 
+    @field_serializer("cv")
+    @classmethod
+    def serialize_logo(cls, cv):
+        if cv:
+            encoded_file_content = base64.b64encode(cv).decode("utf-8")
+            return encoded_file_content
 
-class ApplicantProfile(ApplicantProfileInDB):
-    experiences: List[Experience] = []
+
+class CreateCompanyRequest(BaseModel):
+    name: str
+    description: str
+    logo: Union[bytes, None] = None
+
+    @field_serializer("logo")
+    @classmethod
+    def serialize_logo(cls, logo):
+        if logo:
+            encoded_file_content = base64.b64encode(logo).decode("utf-8")
+            return encoded_file_content
+
+
+class CompanyInDB(BaseModel):
+    id: uuid.UUID
+    name: str
+    description: str
+    logo: Union[bytes, None] = None
+
+    @field_serializer("logo")
+    @classmethod
+    def serialize_logo(cls, logo):
+        if logo:
+            encoded_file_content = base64.b64encode(logo).decode("utf-8")
+            return encoded_file_content
+
+
+class Company(CompanyInDB):
+    pass
+
+
+class RecruiterRole(str, Enum):
+    admin = "admin"
+    employee = "employee"
+
+
+class CreateRecruiterProfileRequest(BaseModel):
+    first_name: str
+    last_name: str
+    recruiter_role: Union[RecruiterRole, None] = None
+
+
+class RecruiterProfileInDB(BaseModel):
+    id: uuid.UUID
+    first_name: str
+    last_name: str
+    company_id: Union[uuid.UUID, None] = None
+    account_id: uuid.UUID
+    recruiter_role: RecruiterRole = RecruiterRole.admin
+
+
+class RecruiterProfileWithCompanyName(BaseModel):
+    first_name: str
+    last_name: str
+    company_name: Union[str, None] = None
+    recruiter_role: RecruiterRole
