@@ -154,15 +154,14 @@ class ApplicantProfile(BaseModel):
 
 
 class ApplicantProfileInDB(BaseModel):
-    id: uuid.UUID
+    account_id: uuid.UUID
     first_name: str
     last_name: str
     education_level_id: int
     age: int
     gender: Gender
-    skill_id_list: List[int]
+    skill_id_list: Optional[List[int]] = []
     experiences: Optional[List[Experience]] = []
-    account_id: uuid.UUID
     cv: Union[bytes, None] = None
     work_type_id: int
     seniority_level_id: int  # TODO: add this catalog #PROJR-60
@@ -262,11 +261,10 @@ class CreateRecruiterProfileRequest(BaseModel):
 
 
 class RecruiterProfileInDB(BaseModel):
-    id: uuid.UUID
+    account_id: uuid.UUID
     first_name: str
     last_name: str
     company_id: Union[uuid.UUID, None] = None
-    account_id: uuid.UUID
     recruiter_role: RecruiterRole = RecruiterRole.admin
 
 
