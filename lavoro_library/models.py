@@ -119,7 +119,7 @@ class Point(BaseModel):
             # Assuming the format is "(longitude,latitude)"
             data = data.strip("()")
             longitude, latitude = map(float, data.split(","))
-            return {'longitude': longitude, 'latitude': latitude}
+            return {"longitude": longitude, "latitude": latitude}
         return data
 
 
@@ -257,7 +257,6 @@ class RecruiterRole(str, Enum):
 class CreateRecruiterProfileRequest(BaseModel):
     first_name: str
     last_name: str
-    recruiter_role: Union[RecruiterRole, None] = None
     company_id: Union[uuid.UUID, None] = None
 
 
