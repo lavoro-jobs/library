@@ -257,6 +257,9 @@ class RecruiterRole(str, Enum):
 class CreateRecruiterProfileRequest(BaseModel):
     first_name: str
     last_name: str
+
+
+class CreateRecruiterProfileWithCompanyRequest(CreateRecruiterProfileRequest):
     company_id: Union[uuid.UUID, None] = None
 
 
