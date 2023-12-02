@@ -258,6 +258,7 @@ class CreateRecruiterProfileRequest(BaseModel):
     first_name: str
     last_name: str
     recruiter_role: Union[RecruiterRole, None] = None
+    company_id: Union[uuid.UUID, None] = None
 
 
 class RecruiterProfileInDB(BaseModel):
@@ -273,3 +274,15 @@ class RecruiterProfileWithCompanyName(BaseModel):
     last_name: str
     company_name: Union[str, None] = None
     recruiter_role: RecruiterRole
+
+
+class JoinCompanyRequest(BaseModel):
+    password: str
+    first_name: str
+    last_name: str
+
+
+class CompanyInvitation(BaseModel):
+    token: str
+    email: str
+    company_id: uuid.UUID
