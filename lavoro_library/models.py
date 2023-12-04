@@ -1,5 +1,6 @@
 import base64
 import inspect
+import io
 import uuid
 
 from datetime import datetime
@@ -7,7 +8,7 @@ from enum import Enum
 from typing import Annotated, List, Optional, Union
 
 from fastapi import Form
-from pydantic import BaseModel, EmailStr, field_serializer, model_validator
+from pydantic import BaseModel, EmailStr, field_serializer, model_validator, validator
 
 
 def as_form(cls):
@@ -210,12 +211,19 @@ class CreateApplicantProfileRequest(BaseModel):
     min_salary: float
     experiences: List[CreateExperienceRequest] = []
 
-    @field_serializer("cv")
-    @classmethod
-    def serialize_logo(cls, cv):
+    @validator("cv")
+    def check_properties(cls, cv):
         if cv:
-            encoded_file_content = base64.b64encode(cv).decode("utf-8")
-            return encoded_file_content
+            try:
+                cv_decoded = base64.b64decode(cv)
+            except Exception:
+                raise ValueError("Invalid file")
+            cv_file = io.BytesIO(cv_decoded)
+            cv_file.seek(0, io.SEEK_END)
+            file_size = cv_file.tell()
+            if file_size > 2 * 1024 * 1024:
+                raise ValueError("CV file size must not exceed 2MB")
+        return cv
 
 
 class CreateCompanyRequest(BaseModel):
@@ -223,12 +231,19 @@ class CreateCompanyRequest(BaseModel):
     description: str
     logo: Union[bytes, None] = None
 
-    @field_serializer("logo")
-    @classmethod
-    def serialize_logo(cls, logo):
+    @validator("logo")
+    def check_properties(cls, logo):
         if logo:
-            encoded_file_content = base64.b64encode(logo).decode("utf-8")
-            return encoded_file_content
+            try:
+                logo_decoded = base64.b64decode(logo)
+            except Exception:
+                raise ValueError("Invalid file")
+            logo_file = io.BytesIO(logo_decoded)
+            logo_file.seek(0, io.SEEK_END)
+            file_size = logo_file.tell()
+            if file_size > 2 * 1024 * 1024:
+                raise ValueError("Logo file size must not exceed 2MB")
+        return logo
 
 
 class CompanyInDB(BaseModel):
