@@ -233,7 +233,6 @@ class UpdateApplicantProfileRequest(BaseModel):
     work_location_max_distance: Optional[int] = None
     contract_type_id: Optional[int] = None
     min_salary: Optional[float] = None
-    #experiences: Optional[List[CreateExperienceRequest]] = None //TODO experiences
 
 
 class CreateCompanyRequest(BaseModel):
