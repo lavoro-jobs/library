@@ -184,7 +184,7 @@ class ExperienceInDB(BaseModel):
     company_name: str
     position_id: int
     years: int
-    applicant_profile_id: uuid.UUID
+    applicant_account_id: uuid.UUID
 
 
 class CreateExperienceRequest(BaseModel):
@@ -233,6 +233,11 @@ class UpdateApplicantProfileRequest(BaseModel):
     work_location_max_distance: Optional[int] = None
     contract_type_id: Optional[int] = None
     min_salary: Optional[float] = None
+
+class UpdateApplicantExperienceRequest(BaseModel):
+    company_name: str
+    position_id: int
+    years: int
 
 
 class CreateCompanyRequest(BaseModel):
