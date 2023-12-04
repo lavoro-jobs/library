@@ -218,6 +218,24 @@ class CreateApplicantProfileRequest(BaseModel):
             return encoded_file_content
 
 
+class UpdateApplicantProfileRequest(BaseModel):
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    education_level_id: Optional[int] = None
+    age: Optional[int] = None
+    gender: Optional[Gender] = None
+    skill_id_list: Optional[List[int]] = None
+    cv: Optional[bytes] = None
+    work_type_id: Optional[int] = None
+    seniority_level_id: Optional[int] = None
+    position_id: Optional[int] = None
+    home_location: Optional[Point] = None
+    work_location_max_distance: Optional[int] = None
+    contract_type_id: Optional[int] = None
+    min_salary: Optional[float] = None
+    #experiences: Optional[List[CreateExperienceRequest]] = None //TODO experiences
+
+
 class CreateCompanyRequest(BaseModel):
     name: str
     description: str
