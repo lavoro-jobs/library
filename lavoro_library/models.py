@@ -219,20 +219,21 @@ class CreateApplicantProfileRequest(BaseModel):
 
 
 class UpdateApplicantProfileRequest(BaseModel):
-    first_name: Optional[str] = None
-    last_name: Optional[str] = None
-    education_level_id: Optional[int] = None
-    age: Optional[int] = None
-    gender: Optional[Gender] = None
-    skill_id_list: Optional[List[int]] = None
-    cv: Optional[bytes] = None
-    work_type_id: Optional[int] = None
-    seniority_level_id: Optional[int] = None
-    position_id: Optional[int] = None
-    home_location: Optional[Point] = None
-    work_location_max_distance: Optional[int] = None
-    contract_type_id: Optional[int] = None
-    min_salary: Optional[float] = None
+    first_name: Union[str, None] = None
+    last_name: Union[str, None] = None
+    education_level_id: Union[int, None] = None
+    age: Union[int, None] = None
+    gender: Union[Gender, None] = None
+    skill_id_list: Union[List[int], None] = None
+    cv: Union[str, None] = None
+    work_type_id: Union[int, None] = None
+    seniority_level_id: Union[int, None] = None
+    position_id: Union[int, None] = None
+    home_location: Union[Point, None] = None
+    work_location_max_distance: Union[int, None] = None
+    contract_type_id: Union[int, None] = None
+    min_salary: Union[float, None] = None
+
 
 class UpdateApplicantExperienceRequest(BaseModel):
     company_name: str
