@@ -145,6 +145,7 @@ class ApplicantProfile(BaseModel):
     gender: Gender
     skills: List[str]
     experiences: Optional[List[Experience]] = []
+    cv: Union[str, None] = None
     work_type: str
     seniority_level: str  # TODO: add this catalog #PROJR-60
     position: str
@@ -229,7 +230,7 @@ class CreateApplicantProfileRequest(BaseModel):
 class CreateCompanyRequest(BaseModel):
     name: str
     description: str
-    logo: Union[bytes, None] = None
+    logo: Union[str, None] = None
 
     @validator("logo")
     def check_properties(cls, logo):
@@ -252,16 +253,14 @@ class CompanyInDB(BaseModel):
     description: str
     logo: Union[bytes, None] = None
 
+
+class Company(CompanyInDB):
     @field_serializer("logo")
     @classmethod
     def serialize_logo(cls, logo):
         if logo:
             encoded_file_content = base64.b64encode(logo).decode("utf-8")
             return encoded_file_content
-
-
-class Company(CompanyInDB):
-    pass
 
 
 class RecruiterRole(str, Enum):
