@@ -186,7 +186,7 @@ class ExperienceInDB(BaseModel):
     company_name: str
     position_id: int
     years: int
-    applicant_profile_id: uuid.UUID
+    applicant_account_id: uuid.UUID
 
 
 class CreateExperienceRequest(BaseModel):
@@ -225,6 +225,29 @@ class CreateApplicantProfileRequest(BaseModel):
             if file_size > 2 * 1024 * 1024:
                 raise ValueError("CV file size must not exceed 2MB")
         return cv
+
+
+class UpdateApplicantProfileRequest(BaseModel):
+    first_name: Union[str, None] = None
+    last_name: Union[str, None] = None
+    education_level_id: Union[int, None] = None
+    age: Union[int, None] = None
+    gender: Union[Gender, None] = None
+    skill_id_list: Union[List[int], None] = None
+    cv: Union[str, None] = None
+    work_type_id: Union[int, None] = None
+    seniority_level_id: Union[int, None] = None
+    position_id: Union[int, None] = None
+    home_location: Union[Point, None] = None
+    work_location_max_distance: Union[int, None] = None
+    contract_type_id: Union[int, None] = None
+    min_salary: Union[float, None] = None
+
+
+class UpdateApplicantExperienceRequest(BaseModel):
+    company_name: str
+    position_id: int
+    years: int
 
 
 class CreateCompanyRequest(BaseModel):
