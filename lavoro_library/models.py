@@ -117,7 +117,6 @@ class Point(BaseModel):
     @model_validator(mode="before")
     def parse_point_string(cls, data):
         if isinstance(data, str):
-            # Assuming the format is "(longitude,latitude)"
             data = data.strip("()")
             longitude, latitude = map(float, data.split(","))
             return {"longitude": longitude, "latitude": latitude}
@@ -166,7 +165,7 @@ class ApplicantProfileInDB(BaseModel):
     experiences: Optional[List[Experience]] = []
     cv: Union[bytes, None] = None
     work_type_id: int
-    seniority_level_id: int  # TODO: add this catalog #PROJR-60
+    seniority_level: int  # TODO: add this catalog #PROJR-60
     position_id: int
     home_location: Point
     work_location_max_distance: int
@@ -204,7 +203,7 @@ class CreateApplicantProfileRequest(BaseModel):
     skill_id_list: List[int]
     cv: Union[bytes, None] = None
     work_type_id: int
-    seniority_level_id: int  # TODO: add this catalog #PROJR-60
+    seniority_level: int  # TODO: add this catalog #PROJR-60
     position_id: int
     home_location: Point
     work_location_max_distance: int
@@ -236,7 +235,7 @@ class UpdateApplicantProfileRequest(BaseModel):
     skill_id_list: Union[List[int], None] = None
     cv: Union[str, None] = None
     work_type_id: Union[int, None] = None
-    seniority_level_id: Union[int, None] = None
+    seniority_level: Union[int, None] = None
     position_id: Union[int, None] = None
     home_location: Union[Point, None] = None
     work_location_max_distance: Union[int, None] = None
