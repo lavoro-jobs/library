@@ -202,7 +202,7 @@ class CreateApplicantProfileRequest(BaseModel):
     age: int
     gender: Gender
     skill_id_list: List[int]
-    cv: Union[bytes, None] = None
+    cv: Union[str, None] = None
     work_type_id: int
     seniority_level_id: int  # TODO: add this catalog #PROJR-60
     position_id: int
