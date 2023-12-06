@@ -288,3 +288,34 @@ class CompanyInvitation(BaseModel):
     token: str
     email: str
     company_id: uuid.UUID
+
+
+class CreateJobPostRequest(BaseModel):
+    position_id: int
+    description: str
+    education_level_id: int
+    skill_id_list: List[int]
+    work_type_id: int
+    work_location: Point
+    contract_type_id: int
+    salary_min: float
+    salary_max: float
+    end_date: datetime
+    assignees: Union[List[uuid.UUID], None] = None
+
+
+class JobPostInDB(BaseModel):
+    id: uuid.UUID
+    company_id: uuid.UUID
+    position_id: int
+    description: str
+    education_level_id: int
+    skill_id_list: List[int]
+    work_type_id: int
+    work_location: Point
+    contract_type_id: int
+    salary_min: float
+    salary_max: float
+    created_on_date: datetime
+    last_updated_date: datetime
+    end_date: datetime
