@@ -24,8 +24,8 @@ class RecruiterProfile(BaseModel):
     company_id: uuid.UUID
     first_name: str
     last_name: str
-    company_id: uuid.UUID
-    recruiter_role: RecruiterRole
+    company_id: Union[uuid.UUID, None] = None
+    recruiter_role: RecruiterRole = RecruiterRole.admin
 
 
 class InviteToken(BaseModel):
