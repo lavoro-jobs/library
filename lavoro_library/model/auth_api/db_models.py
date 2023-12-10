@@ -3,7 +3,7 @@ import uuid
 from datetime import datetime
 from enum import Enum
 
-from pydantic import BaseModel
+from sqlmodel import SQLModel
 
 
 class Role(str, Enum):
@@ -11,7 +11,7 @@ class Role(str, Enum):
     recruiter = "recruiter"
 
 
-class Account(BaseModel):
+class Account(SQLModel):
     id: uuid.UUID
     email: str
     password_hash: str
@@ -20,7 +20,7 @@ class Account(BaseModel):
     created_on: datetime
 
 
-class VerificationToken(BaseModel):
+class VerificationToken(SQLModel):
     token: str
     account_id: uuid.UUID
     expiry_date: datetime
