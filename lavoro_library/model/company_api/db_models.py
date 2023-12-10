@@ -4,7 +4,7 @@ from enum import Enum
 
 from typing import Union
 
-from sqlmodel import SQLModel
+from pydantic import BaseModel
 
 
 class RecruiterRole(str, Enum):
@@ -12,23 +12,23 @@ class RecruiterRole(str, Enum):
     employee = "employee"
 
 
-class Company(SQLModel):
+class Company(BaseModel):
     id: uuid.UUID
     name: str
     description: str
     logo: Union[bytes, None] = None
 
 
-class RecruiterProfile(SQLModel):
+class RecruiterProfile(BaseModel):
     account_id: uuid.UUID
     company_id: uuid.UUID
     first_name: str
     last_name: str
-    company_id: Union[uuid.UUID, None] = None
-    recruiter_role: RecruiterRole = RecruiterRole.admin
+    company_id: uuid.UUID
+    recruiter_role: RecruiterRole
 
 
-class InviteToken(SQLModel):
+class InviteToken(BaseModel):
     token: str
     email: str
     company_id: uuid.UUID
