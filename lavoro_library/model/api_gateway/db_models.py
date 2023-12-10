@@ -1,26 +1,26 @@
-from pydantic import BaseModel
+from sqlmodel import SQLModel
 
 
-class Position(BaseModel):
+class Position(SQLModel):
     id: int
     position_name: str
 
 
-class EducationLevel(BaseModel):
+class EducationLevel(SQLModel):
     id: int
     education_level: str
 
 
-class ContractType(BaseModel):
+class ContractType(SQLModel):
     id: int
     contract_type: str
 
 
-class WorkType(BaseModel):
+class WorkType(SQLModel):
     id: int
     work_type: str
 
 
-class Skill(BaseModel):
+class Skill(SQLModel):
     id: int
     skill_name: str
