@@ -4,8 +4,7 @@ import uuid
 from enum import Enum
 from typing import List, Union
 
-from pydantic import field_serializer
-from sqlmodel import SQLModel
+from pydantic import BaseModel, field_serializer
 
 from lavoro_library.model.shared import Point
 
@@ -16,7 +15,7 @@ class Gender(str, Enum):
     other = "other"
 
 
-class Experience(SQLModel):
+class Experience(BaseModel):
     id: uuid.UUID
     company_name: str
     position_id: int
@@ -24,7 +23,7 @@ class Experience(SQLModel):
     applicant_account_id: uuid.UUID
 
 
-class ApplicantProfile(SQLModel):
+class ApplicantProfile(BaseModel):
     account_id: uuid.UUID
     first_name: str
     last_name: str
