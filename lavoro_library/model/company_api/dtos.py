@@ -65,7 +65,7 @@ class CreateRecruiterProfileDTO(BaseModel):
 class CreateRecruiterProfileWithCompanyDTO(BaseModel):
     first_name: str
     last_name: str
-    company_id: Union[uuid.UUID, None] = None
+    company_id: uuid.UUID
 
 
 class InviteTokenDTO(BaseModel):
