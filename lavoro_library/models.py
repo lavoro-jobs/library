@@ -173,13 +173,6 @@ class ApplicantProfileInDB(BaseModel):
     contract_type_id: int
     min_salary: float
 
-    @field_serializer("cv")
-    @classmethod
-    def serialize_cv(cls, cv):
-        if cv:
-            encoded_file_content = base64.b64encode(cv).decode("utf-8")
-            return encoded_file_content
-
 
 class ExperienceInDB(BaseModel):
     id: uuid.UUID
@@ -270,20 +263,17 @@ class CreateCompanyRequest(BaseModel):
         return logo
 
 
+class Company(BaseModel):
+    id: uuid.UUID
+    name: str
+    description: str
+    logo: Union[str, None] = None
+    
 class CompanyInDB(BaseModel):
     id: uuid.UUID
     name: str
     description: str
     logo: Union[bytes, None] = None
-
-
-class Company(CompanyInDB):
-    @field_serializer("logo")
-    @classmethod
-    def serialize_logo(cls, logo):
-        if logo:
-            encoded_file_content = base64.b64encode(logo).decode("utf-8")
-            return encoded_file_content
 
 
 class RecruiterRole(str, Enum):
