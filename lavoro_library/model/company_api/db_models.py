@@ -1,10 +1,11 @@
+import base64
 import uuid
 
 from enum import Enum
 
 from typing import Union
 
-from pydantic import BaseModel
+from pydantic import BaseModel, field_serializer
 
 
 class RecruiterRole(str, Enum):
@@ -16,7 +17,18 @@ class Company(BaseModel):
     id: uuid.UUID
     name: str
     description: str
-    logo: Union[bytes, None] = None
+    logo: Union[bytes, str, None] = None
+
+    @field_serializer("logo")
+    @classmethod
+    def serialize_logo(cls, logo):
+        if logo:
+            if isinstance(logo, str):
+                return logo
+            else:
+                return base64.b64encode(logo).decode("utf-8")
+        else:
+            return None
 
 
 class RecruiterProfile(BaseModel):
