@@ -62,7 +62,6 @@ class CreateApplicantProfileDTO(BaseModel):
     work_location_max_distance: int
     contract_type_id: int
     min_salary: float
-    experiences: List[CreateExperienceDTO] = []
 
     @validator("cv")
     def check_properties(cls, cv):
@@ -77,6 +76,10 @@ class CreateApplicantProfileDTO(BaseModel):
             if file_size > 2 * 1024 * 1024:
                 raise ValueError("CV file size must not exceed 2MB")
         return cv
+
+
+class CreateApplicantProfileWithExperiencesDTO(CreateApplicantProfileDTO):
+    experiences: List[CreateExperienceDTO] = []
 
 
 class UpdateApplicantProfileDTO(BaseModel):
