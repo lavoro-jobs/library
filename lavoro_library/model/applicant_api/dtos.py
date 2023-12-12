@@ -111,6 +111,6 @@ class UpdateApplicantProfileDTO(BaseModel):
 
 
 class UpdateApplicantExperienceDTO(BaseModel):
-    company_name: str
-    position_id: int
-    years: int
+    company_name: Union[str, None] = None
+    position_id: Union[int, None] = None
+    years: Union[int, None] = None
