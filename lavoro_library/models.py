@@ -161,7 +161,7 @@ class ApplicantProfileInDB(BaseModel):
     education_level_id: int
     age: int
     gender: Gender
-    skill_id_list: Optional[List[int]] = []
+    skill_ids: Optional[List[int]] = []
     experiences: Optional[List[Experience]] = []
     cv: Union[bytes, None] = None
     work_type_id: int
@@ -200,7 +200,7 @@ class CreateApplicantProfileRequest(BaseModel):
     education_level_id: int
     age: int
     gender: Gender
-    skill_id_list: List[int]
+    skill_ids: List[int]
     cv: Union[bytes, None] = None
     work_type_id: int
     seniority_level: int  # TODO: add this catalog #PROJR-60
@@ -232,7 +232,7 @@ class UpdateApplicantProfileRequest(BaseModel):
     education_level_id: Union[int, None] = None
     age: Union[int, None] = None
     gender: Union[Gender, None] = None
-    skill_id_list: Union[List[int], None] = None
+    skill_ids: Union[List[int], None] = None
     cv: Union[str, None] = None
     work_type_id: Union[int, None] = None
     seniority_level: Union[int, None] = None
