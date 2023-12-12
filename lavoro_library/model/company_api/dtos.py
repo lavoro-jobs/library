@@ -28,7 +28,7 @@ class CompanyDTO(BaseModel):
     name: str
     description: str
     logo: Union[str, None] = None
-    
+
     @validator("logo")
     def check_properties(cls, logo):
         if logo:
@@ -65,11 +65,6 @@ class CreateCompanyDTO(BaseModel):
 
 
 class CreateRecruiterProfileDTO(BaseModel):
-    first_name: str
-    last_name: str
-
-
-class CreateRecruiterProfileWithCompanyDTO(BaseModel):
     first_name: str
     last_name: str
     company_id: Union[uuid.UUID, None] = None
