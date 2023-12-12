@@ -1,5 +1,6 @@
 import base64
 import inspect
+import io
 import uuid
 
 from datetime import datetime
@@ -7,7 +8,7 @@ from enum import Enum
 from typing import Annotated, List, Optional, Union
 
 from fastapi import Form
-from pydantic import BaseModel, EmailStr, field_serializer, model_validator
+from pydantic import BaseModel, EmailStr, field_serializer, model_validator, validator
 
 
 def as_form(cls):
@@ -144,6 +145,7 @@ class ApplicantProfile(BaseModel):
     gender: Gender
     skills: List[str]
     experiences: Optional[List[Experience]] = []
+    cv: Union[str, None] = None
     work_type: str
     seniority_level: str  # TODO: add this catalog #PROJR-60
     position: str
@@ -171,20 +173,13 @@ class ApplicantProfileInDB(BaseModel):
     contract_type_id: int
     min_salary: float
 
-    @field_serializer("cv")
-    @classmethod
-    def serialize_cv(cls, cv):
-        if cv:
-            encoded_file_content = base64.b64encode(cv).decode("utf-8")
-            return encoded_file_content
-
 
 class ExperienceInDB(BaseModel):
     id: uuid.UUID
     company_name: str
     position_id: int
     years: int
-    applicant_profile_id: uuid.UUID
+    applicant_account_id: uuid.UUID
 
 
 class CreateExperienceRequest(BaseModel):
@@ -200,7 +195,7 @@ class CreateApplicantProfileRequest(BaseModel):
     age: int
     gender: Gender
     skill_id_list: List[int]
-    cv: Union[bytes, None] = None
+    cv: Union[str, None] = None
     work_type_id: int
     seniority_level_id: int  # TODO: add this catalog #PROJR-60
     position_id: int
@@ -210,43 +205,75 @@ class CreateApplicantProfileRequest(BaseModel):
     min_salary: float
     experiences: List[CreateExperienceRequest] = []
 
-    @field_serializer("cv")
-    @classmethod
-    def serialize_logo(cls, cv):
+    @validator("cv")
+    def check_properties(cls, cv):
         if cv:
-            encoded_file_content = base64.b64encode(cv).decode("utf-8")
-            return encoded_file_content
+            try:
+                cv_decoded = base64.b64decode(cv)
+            except Exception:
+                raise ValueError("Invalid file")
+            cv_file = io.BytesIO(cv_decoded)
+            cv_file.seek(0, io.SEEK_END)
+            file_size = cv_file.tell()
+            if file_size > 2 * 1024 * 1024:
+                raise ValueError("CV file size must not exceed 2MB")
+        return cv
+
+
+class UpdateApplicantProfileRequest(BaseModel):
+    first_name: Union[str, None] = None
+    last_name: Union[str, None] = None
+    education_level_id: Union[int, None] = None
+    age: Union[int, None] = None
+    gender: Union[Gender, None] = None
+    skill_id_list: Union[List[int], None] = None
+    cv: Union[str, None] = None
+    work_type_id: Union[int, None] = None
+    seniority_level_id: Union[int, None] = None
+    position_id: Union[int, None] = None
+    home_location: Union[Point, None] = None
+    work_location_max_distance: Union[int, None] = None
+    contract_type_id: Union[int, None] = None
+    min_salary: Union[float, None] = None
+
+
+class UpdateApplicantExperienceRequest(BaseModel):
+    company_name: str
+    position_id: int
+    years: int
 
 
 class CreateCompanyRequest(BaseModel):
     name: str
     description: str
-    logo: Union[bytes, None] = None
+    logo: Union[str, None] = None
 
-    @field_serializer("logo")
-    @classmethod
-    def serialize_logo(cls, logo):
+    @validator("logo")
+    def check_properties(cls, logo):
         if logo:
-            encoded_file_content = base64.b64encode(logo).decode("utf-8")
-            return encoded_file_content
+            try:
+                logo_decoded = base64.b64decode(logo)
+            except Exception:
+                raise ValueError("Invalid file")
+            logo_file = io.BytesIO(logo_decoded)
+            logo_file.seek(0, io.SEEK_END)
+            file_size = logo_file.tell()
+            if file_size > 2 * 1024 * 1024:
+                raise ValueError("Logo file size must not exceed 2MB")
+        return logo
 
 
+class Company(BaseModel):
+    id: uuid.UUID
+    name: str
+    description: str
+    logo: Union[str, None] = None
+    
 class CompanyInDB(BaseModel):
     id: uuid.UUID
     name: str
     description: str
     logo: Union[bytes, None] = None
-
-    @field_serializer("logo")
-    @classmethod
-    def serialize_logo(cls, logo):
-        if logo:
-            encoded_file_content = base64.b64encode(logo).decode("utf-8")
-            return encoded_file_content
-
-
-class Company(CompanyInDB):
-    pass
 
 
 class RecruiterRole(str, Enum):
