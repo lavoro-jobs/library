@@ -31,7 +31,7 @@ class ApplicantProfile(BaseModel):
     age: int
     gender: Gender
     skill_ids: List[int]
-    cv: Union[bytes, None] = None
+    cv: Union[bytes, str, None] = None
     work_type_id: int
     seniority_level: int
     position_id: int
@@ -44,5 +44,9 @@ class ApplicantProfile(BaseModel):
     @classmethod
     def serialize_cv(cls, cv):
         if cv:
-            encoded_file_content = base64.b64encode(cv).decode("utf-8")
-            return encoded_file_content
+            if isinstance(cv, str):
+                return cv
+            else:
+                return base64.b64encode(cv).decode("utf-8")
+        else:
+            return None
