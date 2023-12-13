@@ -44,3 +44,24 @@ class InviteToken(BaseModel):
     token: str
     email: str
     company_id: uuid.UUID
+<<<<<<< Updated upstream
+=======
+
+
+class JobPost(BaseModel):
+    id: uuid.UUID
+    company_id: uuid.UUID
+    position_id: int
+    description: str
+    education_level_id: int
+    skill_ids: List[int]
+    work_type_id: int
+    work_location: Point
+    contract_type_id: int
+    salary_min: Union[float, None] = None
+    salary_max: Union[float, None] = None
+    created_on_date: datetime
+    last_updated_date: datetime
+    end_date: datetime
+    assignees: List[uuid.UUID] = []  # not part of the database model
+>>>>>>> Stashed changes
