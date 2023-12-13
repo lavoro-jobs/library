@@ -56,6 +56,7 @@ class JobPost(BaseModel):
     education_level_id: int
     skill_ids: List[int]
     work_type_id: int
+    seniority_level: int
     work_location: Point
     contract_type_id: int
     salary_min: Union[float, None] = None
