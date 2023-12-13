@@ -1,11 +1,14 @@
 import base64
+import datetime
 import uuid
 
 from enum import Enum
 
-from typing import Union
+from typing import List, Union
 
 from pydantic import BaseModel, field_serializer
+
+from lavoro_library.model.shared import Point
 
 
 class RecruiterRole(str, Enum):
@@ -44,8 +47,6 @@ class InviteToken(BaseModel):
     token: str
     email: str
     company_id: uuid.UUID
-<<<<<<< Updated upstream
-=======
 
 
 class JobPost(BaseModel):
@@ -64,4 +65,3 @@ class JobPost(BaseModel):
     last_updated_date: datetime
     end_date: datetime
     assignees: List[uuid.UUID] = []  # not part of the database model
->>>>>>> Stashed changes
