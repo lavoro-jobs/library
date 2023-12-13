@@ -86,6 +86,7 @@ class JobPostDTO(BaseModel):
     education_level: EducationLevelDTO
     skills: List[SkillDTO]
     work_type: WorkTypeDTO
+    seniority_level: int
     work_location: Point
     contract_type: ContractTypeDTO
     salary_min: Union[float, None] = None
@@ -100,6 +101,7 @@ class CreateJobPostDTO(BaseModel):
     education_level_id: int
     skill_ids: List[int]
     work_type_id: int
+    seniority_level: int
     work_location: Point
     contract_type_id: int
     salary_min: Union[float, None] = None
