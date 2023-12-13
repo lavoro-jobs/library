@@ -2,12 +2,14 @@ import base64
 import io
 import uuid
 
-from typing import Union
+from datetime import datetime, timezone
+from typing import List, Union
 
 from pydantic import BaseModel, field_serializer, validator
 from lavoro_library.model.api_gateway.dtos import ContractTypeDTO, EducationLevelDTO, PositionDTO, SkillDTO, WorkTypeDTO
 
 from lavoro_library.model.company_api.db_models import RecruiterRole
+from lavoro_library.model.shared import Point
 
 
 class RecruiterProfileDTO(BaseModel):  # RecruiterProfileWithCompanyName
@@ -75,8 +77,6 @@ class InviteTokenDTO(BaseModel):
     token: str
     email: str
     company_id: uuid.UUID
-<<<<<<< Updated upstream
-=======
 
 
 class JobPostDTO(BaseModel):
@@ -134,4 +134,3 @@ class CreateJobPostDTO(BaseModel):
         if len(set(assignees)) != len(assignees):
             raise ValueError("Assignees must be unique")
         return assignees
->>>>>>> Stashed changes
