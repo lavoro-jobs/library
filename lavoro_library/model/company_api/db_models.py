@@ -63,3 +63,4 @@ class JobPost(BaseModel):
     created_on_date: datetime
     last_updated_date: datetime
     end_date: datetime
+    assignees: List[uuid.UUID] = []  # not part of the database model

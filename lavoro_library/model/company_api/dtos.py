@@ -6,6 +6,7 @@ from datetime import datetime, timezone
 from typing import List, Union
 
 from pydantic import BaseModel, field_serializer, validator
+from lavoro_library.model.api_gateway.dtos import ContractTypeDTO, EducationLevelDTO, PositionDTO, SkillDTO, WorkTypeDTO
 
 from lavoro_library.model.company_api.db_models import RecruiterRole
 from lavoro_library.model.shared import Point
@@ -76,6 +77,21 @@ class InviteTokenDTO(BaseModel):
     token: str
     email: str
     company_id: uuid.UUID
+
+
+class JobPostDTO(BaseModel):
+    id: uuid.UUID
+    position: PositionDTO
+    description: str
+    education_level: EducationLevelDTO
+    skills: List[SkillDTO]
+    work_type: WorkTypeDTO
+    work_location: Point
+    contract_type: ContractTypeDTO
+    salary_min: Union[float, None] = None
+    salary_max: Union[float, None] = None
+    end_date: datetime
+    assignees: List[uuid.UUID] = []
 
 
 class CreateJobPostDTO(BaseModel):

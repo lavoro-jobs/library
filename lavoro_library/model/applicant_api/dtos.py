@@ -13,13 +13,13 @@ from lavoro_library.model.api_gateway.dtos import (
     WorkTypeDTO,
 )
 from lavoro_library.model.applicant_api.db_models import Gender
-from lavoro_library.model.company_api.db_models import RecruiterRole
 from lavoro_library.model.shared import Point
 
 
 class ExperienceDTO(BaseModel):
+    id: uuid.UUID
     company_name: str
-    position_id: int
+    position: PositionDTO
     years: int
 
 
