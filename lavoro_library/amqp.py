@@ -3,7 +3,6 @@ from typing import Callable
 
 import jsonpickle
 import pika
-from lavoro_library.model.message_schemas import ItemToMatch
 
 
 class AMQPConnection:
@@ -46,7 +45,7 @@ class RabbitMQProducer(AMQPConnection):
             except pika.exceptions.AMQPConnectionError:
                 print("Connection was lost. Trying to reconnect...")
                 self._connect()
-                time.sleep(1)  # Wait before trying to reconnect
+                time.sleep(1)
 
 
 class RabbitMQConsumer(AMQPConnection):
