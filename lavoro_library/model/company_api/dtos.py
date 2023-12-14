@@ -95,6 +95,11 @@ class JobPostDTO(BaseModel):
     assignees: List[uuid.UUID] = []
 
 
+class AssigneeDTO(BaseModel):
+    job_post_id: uuid.UUID
+    assignee_id: uuid.UUID
+
+
 class CreateJobPostDTO(BaseModel):
     position_id: int
     description: str
@@ -107,7 +112,6 @@ class CreateJobPostDTO(BaseModel):
     salary_min: Union[float, None] = None
     salary_max: Union[float, None] = None
     end_date: datetime
-    assignees: Union[List[uuid.UUID], None] = []
 
     @validator("end_date")
     def check_end_date(cls, end_date):
@@ -130,6 +134,14 @@ class CreateJobPostDTO(BaseModel):
                 if salary_max < values["salary_min"]:
                     raise ValueError("Salary max must be greater than salary min")
         return salary_max
+
+
+class CreateAssigneeDTO(BaseModel):
+    assignee_id: uuid.UUID
+
+
+class CreateJobPostWithAssigneesDTO(CreateJobPostDTO):
+    assignees: List[uuid.UUID] = []
 
     @validator("assignees")
     def check_assignees(cls, assignees):
