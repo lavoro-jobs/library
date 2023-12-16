@@ -41,6 +41,17 @@ class ApplicantProfileDTO(BaseModel):
     min_salary: float
 
 
+class ApplicantProfileForJobPostDTO(BaseModel):
+    education_level: EducationLevelDTO
+    age: int
+    skills: List[SkillDTO]
+    experiences: List[ExperienceDTO] = []
+    work_type: WorkTypeDTO
+    seniority_level: int
+    position: PositionDTO
+    contract_type: ContractTypeDTO
+
+
 class CreateExperienceDTO(BaseModel):
     company_name: str
     position_id: int

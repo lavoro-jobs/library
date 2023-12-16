@@ -8,7 +8,7 @@ from typing import List, Union
 from pydantic import BaseModel, validator
 from lavoro_library.model.api_gateway.dtos import ContractTypeDTO, EducationLevelDTO, PositionDTO, SkillDTO, WorkTypeDTO
 
-from lavoro_library.model.company_api.db_models import RecruiterRole
+from lavoro_library.model.company_api.db_models import RecruiterProfile, RecruiterRole
 from lavoro_library.model.shared import Point
 
 
@@ -101,12 +101,30 @@ class JobPostDTO(BaseModel):
     salary_min: Union[float, None] = None
     salary_max: Union[float, None] = None
     end_date: datetime
-    assignees: List[uuid.UUID] = []
+    assignees: List[RecruiterProfile] = []
+
+
+class JobPostForApplicantDTO(BaseModel):
+    id: uuid.UUID
+    position: PositionDTO
+    description: str
+    education_level: EducationLevelDTO
+    skills: List[SkillDTO]
+    work_type: WorkTypeDTO
+    seniority_level: int
+    work_location: Point
+    contract_type: ContractTypeDTO
+    salary_min: Union[float, None] = None
+    salary_max: Union[float, None] = None
+    end_date: datetime
+    company: CompanyDTO
 
 
 class AssigneeDTO(BaseModel):
     job_post_id: uuid.UUID
     assignee_id: uuid.UUID
+    first_name: str
+    last_name: str
 
 
 class CreateJobPostDTO(BaseModel):
