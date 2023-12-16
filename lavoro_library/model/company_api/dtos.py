@@ -47,6 +47,10 @@ class CompanyDTO(BaseModel):
         return logo
 
 
+class CompanyWithRecruitersDTO(CompanyDTO):
+    recruiters: List[RecruiterProfileDTO] = []
+
+
 class CreateCompanyDTO(BaseModel):
     name: str
     description: str
@@ -71,6 +75,11 @@ class CreateRecruiterProfileDTO(BaseModel):
     first_name: str
     last_name: str
     company_id: Union[uuid.UUID, None] = None
+
+
+class UpdateRecruiterProfileDTO(BaseModel):
+    first_name: Union[str, None] = None
+    last_name: Union[str, None] = None
 
 
 class InviteTokenDTO(BaseModel):
