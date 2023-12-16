@@ -5,7 +5,7 @@ import uuid
 from datetime import datetime, timezone
 from typing import List, Union
 
-from pydantic import BaseModel, field_serializer, validator
+from pydantic import BaseModel, validator
 from lavoro_library.model.api_gateway.dtos import ContractTypeDTO, EducationLevelDTO, PositionDTO, SkillDTO, WorkTypeDTO
 
 from lavoro_library.model.company_api.db_models import RecruiterRole
@@ -136,8 +136,14 @@ class CreateJobPostDTO(BaseModel):
         return salary_max
 
 
-class CreateAssigneeDTO(BaseModel):
-    assignee_id: uuid.UUID
+class CreateAssigneesDTO(BaseModel):
+    assignees: List[uuid.UUID] = []
+
+    @validator("assignees")
+    def check_assignees(cls, assignees):
+        if len(set(assignees)) != len(assignees):
+            raise ValueError("Assignees must be unique")
+        return assignees
 
 
 class CreateJobPostWithAssigneesDTO(CreateJobPostDTO):

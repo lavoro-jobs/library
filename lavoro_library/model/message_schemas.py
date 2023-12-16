@@ -1,5 +1,6 @@
-from typing import List, Union
 import uuid
+from typing import List, Union
+
 from pydantic import BaseModel
 
 from lavoro_library.model.shared import Point
@@ -34,3 +35,8 @@ class ApplicantProfileToMatch(BaseModel):
 
 class ItemToMatch(BaseModel):
     data: Union[JobPostToMatch, ApplicantProfileToMatch]
+
+
+class MatchToCalculate(BaseModel):
+    job_post_to_match: JobPostToMatch
+    applicant_profile_to_match: ApplicantProfileToMatch

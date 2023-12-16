@@ -62,6 +62,3 @@ class RabbitMQConsumer(AMQPConnection):
                 print("Connection was lost. Trying to reconnect...")
                 self._connect()
                 time.sleep(1)
-
-    def _acknowledge(self, method):
-        self._channel.basic_ack(delivery_tag=method.delivery_tag)
