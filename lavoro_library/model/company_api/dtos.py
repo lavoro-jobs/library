@@ -73,6 +73,11 @@ class CreateRecruiterProfileDTO(BaseModel):
     company_id: Union[uuid.UUID, None] = None
 
 
+class UpdateRecruiterProfileDTO(BaseModel):
+    first_name: Union[str, None] = None
+    last_name: Union[str, None] = None
+
+
 class InviteTokenDTO(BaseModel):
     token: str
     email: str
