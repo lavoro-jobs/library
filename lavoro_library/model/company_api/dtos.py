@@ -47,6 +47,10 @@ class CompanyDTO(BaseModel):
         return logo
 
 
+class CompanyWithRecruitersDTO(CompanyDTO):
+    recruiters: List[RecruiterProfileDTO] = []
+
+
 class CreateCompanyDTO(BaseModel):
     name: str
     description: str
