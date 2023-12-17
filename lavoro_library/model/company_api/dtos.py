@@ -181,3 +181,39 @@ class CreateJobPostWithAssigneesDTO(CreateJobPostDTO):
         if len(set(assignees)) != len(assignees):
             raise ValueError("Assignees must be unique")
         return assignees
+
+
+class UpdateJobPostDTO(BaseModel):
+    position_id: Union[int, None] = None
+    description: Union[str, None] = None
+    education_level_id: Union[int, None] = None
+    skill_ids: Union[List[int], None] = None
+    work_type_id: Union[int, None] = None
+    seniority_level: Union[int, None] = None
+    work_location: Union[Point, None] = None
+    contract_type_id: Union[int, None] = None
+    salary_min: Union[float, None] = None
+    salary_max: Union[float, None] = None
+    end_date: Union[datetime, None] = None
+
+    @validator("end_date")
+    def check_end_date(cls, end_date):
+        if end_date and end_date < datetime.now(timezone.utc):
+            raise ValueError("End date must be in the future")
+        return end_date
+
+    @validator("salary_min")
+    def check_salary_min(cls, salary_min):
+        if salary_min and salary_min <= 0:
+            raise ValueError("Salary min must be greater than 0")
+        return salary_min
+
+    @validator("salary_max")
+    def check_salary_max(cls, salary_max, values):
+        if salary_max:
+            if salary_max <= 0:
+                raise ValueError("Salary max must be greater than 0")
+            if values.get("salary_min"):
+                if salary_max < values["salary_min"]:
+                    raise ValueError("Salary max must be greater than salary min")
+        return salary_max
