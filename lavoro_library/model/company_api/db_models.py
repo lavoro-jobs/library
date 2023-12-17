@@ -64,4 +64,8 @@ class JobPost(BaseModel):
     created_on_date: datetime
     last_updated_date: datetime
     end_date: datetime
-    assignees: List[uuid.UUID] = []  # not part of the database model
+
+
+class Assignee(BaseModel):
+    job_post_id: uuid.UUID
+    recruiter_account_id: uuid.UUID

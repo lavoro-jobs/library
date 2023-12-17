@@ -42,11 +42,15 @@ class Database:
         try:
             total_affected_rows = 0
             cursor = self.connection.cursor()
+            result_list = []
             with self.connection.transaction():
                 for query, param_dict in query_tuple_list:
                     cursor.execute(query, param_dict)
+                    if cursor.description is not None:
+                        result = cursor.fetchall()
+                        result_list.extend(result)
                     total_affected_rows += cursor.rowcount
-                return {"affected_rows": total_affected_rows}
+                return {"result": result_list, "affected_rows": total_affected_rows}
         except psycopg.Error as e:
             print(e)
             return {"affected_rows": 0}
