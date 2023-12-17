@@ -1,3 +1,4 @@
+from datetime import datetime
 import uuid
 from typing import List, Union
 
@@ -17,6 +18,7 @@ class JobPostToMatch(BaseModel):
     salary_min: int
     salary_max: int
     seniority_level: int
+    end_date: datetime
 
 
 class ApplicantProfileToMatch(BaseModel):
