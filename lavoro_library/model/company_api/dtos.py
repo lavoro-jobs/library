@@ -217,3 +217,22 @@ class UpdateJobPostDTO(BaseModel):
                 if salary_max < values["salary_min"]:
                     raise ValueError("Salary max must be greater than salary min")
         return salary_max
+
+
+class UpdateCompanyDTO(BaseModel):
+    description: str
+    logo: Union[str, None] = None
+
+    @validator("logo")
+    def check_properties(cls, logo):
+        if logo:
+            try:
+                logo_decoded = base64.b64decode(logo)
+            except Exception:
+                raise ValueError("Invalid file")
+            logo_file = io.BytesIO(logo_decoded)
+            logo_file.seek(0, io.SEEK_END)
+            file_size = logo_file.tell()
+            if file_size > 2 * 1024 * 1024:
+                raise ValueError("Logo file size must not exceed 2MB")
+        return logo
