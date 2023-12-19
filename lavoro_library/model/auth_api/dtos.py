@@ -1,4 +1,5 @@
 from typing import Annotated, Union
+import uuid
 
 from fastapi import Form
 from pydantic import BaseModel, EmailStr
@@ -25,6 +26,7 @@ class LoginDTO(BaseModel):
 
 
 class AccountDTO(BaseModel):
+    id: uuid.UUID
     email: str
     is_active: bool
     role: str
