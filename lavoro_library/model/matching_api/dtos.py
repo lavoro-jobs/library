@@ -22,3 +22,10 @@ class JobPostMatchDTO(BaseModel):
     applicant_profile: ApplicantProfileForJobPostDTO
     match_score: float
     approved_by_applicant: Union[bool, None] = None
+
+
+class ApplicationDTO(BaseModel):
+    job_post_id: str
+    applicant_account_id: str
+    created_on_date: str
+    approved_by_company: Union[bool, None] = None
