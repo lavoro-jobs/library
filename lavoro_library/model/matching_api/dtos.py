@@ -22,3 +22,7 @@ class JobPostMatchDTO(BaseModel):
     applicant_profile: ApplicantProfileForJobPostDTO
     match_score: float
     approved_by_applicant: Union[bool, None] = None
+
+
+class CreateCommentDTO(BaseModel):
+    comment_body: str
