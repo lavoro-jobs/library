@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Union
+from typing import List, Union
 from pydantic import BaseModel
 
 from lavoro_library.model.applicant_api.dtos import ApplicantProfileForJobPostDTO
@@ -31,12 +31,21 @@ class JobPostMatchDTO(BaseModel):
     end_date: Union[datetime, None] = None
 
 
+class CommentDTO(BaseModel):
+    account_id: str
+    job_post_id: str
+    applicant_account_id: str
+    comment_body: str
+    created_on_date: datetime
+
+
+class CreateCommentDTO(BaseModel):
+    comment_body: str
+
+
 class ApplicationDTO(BaseModel):
     job_post_id: str
     applicant_account_id: str
     created_on_date: str
     approved_by_company: Union[bool, None] = None
-
-
-class CreateCommentDTO(BaseModel):
-    comment_body: str
+    comments: Union[List[CommentDTO], None] = None
