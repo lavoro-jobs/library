@@ -18,6 +18,7 @@ class Account(BaseModel):
     is_active: bool
     role: str
     created_on: datetime
+    stream_chat_token: str
 
 
 class VerificationToken(BaseModel):
