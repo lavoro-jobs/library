@@ -18,3 +18,11 @@ class Application(BaseModel):
     applicant_account_id: uuid.UUID
     created_on_date: datetime
     approved_by_company: Union[bool, None] = None
+
+
+class Comment(BaseModel):
+    account_id: uuid.UUID
+    job_post_id: uuid.UUID
+    applicant_account_id: uuid.UUID
+    comment_body: str
+    created_on_date: datetime
