@@ -9,6 +9,8 @@ class Match(BaseModel):
     applicant_account_id: uuid.UUID
     match_score: float
     approved_by_applicant: Union[bool, None] = None
+    created_on_date: datetime
+    end_date: Union[datetime, None] = None
 
 
 class Application(BaseModel):
