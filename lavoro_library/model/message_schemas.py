@@ -35,8 +35,12 @@ class ApplicantProfileToMatch(BaseModel):
     experience_years: int
 
 
+class DeleteJobPost(BaseModel):
+    job_post_id: uuid.UUID
+
+
 class ItemToMatch(BaseModel):
-    data: Union[JobPostToMatch, ApplicantProfileToMatch]
+    data: Union[JobPostToMatch, ApplicantProfileToMatch, DeleteJobPost]
 
 
 class MatchToCalculate(BaseModel):
