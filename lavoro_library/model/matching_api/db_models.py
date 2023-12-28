@@ -21,6 +21,7 @@ class Application(BaseModel):
 
 
 class Comment(BaseModel):
+    id: uuid.UUID
     account_id: uuid.UUID
     job_post_id: uuid.UUID
     applicant_account_id: uuid.UUID
