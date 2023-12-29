@@ -32,6 +32,7 @@ class JobPostMatchDTO(BaseModel):
 
 
 class CommentDTO(BaseModel):
+    id: str
     account_id: str
     job_post_id: str
     applicant_account_id: str
