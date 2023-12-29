@@ -32,6 +32,10 @@ class AccountDTO(BaseModel):
     role: str
 
 
+class AccountWithStreamChatTokenDTO(AccountDTO):
+    stream_chat_token: str
+
+
 class TokenDTO(BaseModel):
     access_token: str
     token_type: str
