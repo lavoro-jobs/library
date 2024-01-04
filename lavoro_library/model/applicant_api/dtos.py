@@ -24,6 +24,7 @@ class ExperienceDTO(BaseModel):
 
 
 class ApplicantProfileDTO(BaseModel):
+    account_id: uuid.UUID
     first_name: str
     last_name: str
     education_level: EducationLevelDTO
