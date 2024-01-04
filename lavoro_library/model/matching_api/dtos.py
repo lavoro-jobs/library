@@ -34,6 +34,8 @@ class JobPostMatchDTO(BaseModel):
 class CommentDTO(BaseModel):
     id: str
     account_id: str
+    recruiter_first_name: Union[str, None] = None
+    recruiter_last_name: Union[str, None] = None
     job_post_id: str
     applicant_account_id: str
     comment_body: str
