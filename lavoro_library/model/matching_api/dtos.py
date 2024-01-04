@@ -3,7 +3,7 @@ from typing import List, Union
 from pydantic import BaseModel
 
 from lavoro_library.model.applicant_api.dtos import ApplicantProfileForJobPostDTO
-from lavoro_library.model.company_api.dtos import JobPostForApplicantDTO
+from lavoro_library.model.company_api.dtos import JobPostForApplicantDTO, RecruiterProfileDTO
 
 
 class MatchDTO(BaseModel):
@@ -38,6 +38,7 @@ class CommentDTO(BaseModel):
     applicant_account_id: str
     comment_body: str
     created_on_date: datetime
+    recruiter: Union[RecruiterProfileDTO, None] = None
 
 
 class CreateCommentDTO(BaseModel):

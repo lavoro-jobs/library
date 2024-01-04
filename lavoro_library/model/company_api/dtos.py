@@ -13,6 +13,7 @@ from lavoro_library.model.shared import Point
 
 
 class RecruiterProfileDTO(BaseModel):  # RecruiterProfileWithCompanyName
+    account_id: uuid.UUID
     first_name: str
     last_name: str
     company_id: Union[uuid.UUID, None] = None
@@ -20,6 +21,7 @@ class RecruiterProfileDTO(BaseModel):  # RecruiterProfileWithCompanyName
 
 
 class RecruiterProfileWithCompanyNameDTO(BaseModel):
+    account_id: uuid.UUID
     first_name: str
     last_name: str
     company_name: Union[str, None] = None
