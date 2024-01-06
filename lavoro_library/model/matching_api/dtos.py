@@ -52,3 +52,4 @@ class ApplicationDTO(BaseModel):
     approved_by_company: Union[bool, None] = None
     applicant: Union[ApplicantProfileDTO, None] = None
     comments: Union[List[CommentDTO], None] = None
+    applicant_stream_chat_token: Union[str, None] = None
