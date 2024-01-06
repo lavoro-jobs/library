@@ -33,6 +33,7 @@ class ApplicantProfileDTO(BaseModel):
     skills: List[SkillDTO]
     experiences: List[ExperienceDTO] = []
     cv: Union[str, None] = None
+    profile_picture: Union[str, None] = None
     work_type: WorkTypeDTO
     seniority_level: int
     position: PositionDTO
@@ -67,6 +68,7 @@ class CreateApplicantProfileDTO(BaseModel):
     gender: Gender
     skill_ids: List[int] = []
     cv: Union[str, None] = None
+    profile_picture: Union[str, None] = None
     work_type_id: int
     seniority_level: int
     position_id: int
@@ -89,6 +91,20 @@ class CreateApplicantProfileDTO(BaseModel):
                 raise ValueError("CV file size must not exceed 2MB")
         return cv
 
+    @validator("profile_picture")
+    def check_properties(cls, profile_picture):
+        if profile_picture:
+            try:
+                profile_picture_decoded = base64.b64decode(profile_picture)
+            except Exception:
+                raise ValueError("Invalid file")
+            profile_picture_file = io.BytesIO(profile_picture_decoded)
+            profile_picture_file.seek(0, io.SEEK_END)
+            file_size = profile_picture_file.tell()
+            if file_size > 3 * 1024 * 1024:
+                raise ValueError("Profile picture file size must not exceed 2MB")
+        return profile_picture
+
 
 class CreateApplicantProfileWithExperiencesDTO(CreateApplicantProfileDTO):
     experiences: List[CreateExperienceDTO] = []
@@ -102,6 +118,7 @@ class UpdateApplicantProfileDTO(BaseModel):
     gender: Union[Gender, None] = None
     skill_ids: Union[List[int], None] = None
     cv: Union[str, None] = None
+    profile_picture: Union[str, None] = None
     work_type_id: Union[int, None] = None
     seniority_level: Union[int, None] = None
     position_id: Union[int, None] = None
@@ -123,6 +140,20 @@ class UpdateApplicantProfileDTO(BaseModel):
             if file_size > 2 * 1024 * 1024:
                 raise ValueError("CV file size must not exceed 2MB")
         return cv
+
+    @validator("profile_picture")
+    def check_properties(cls, profile_picture):
+        if profile_picture:
+            try:
+                profile_picture_decoded = base64.b64decode(profile_picture)
+            except Exception:
+                raise ValueError("Invalid file")
+            profile_picture_file = io.BytesIO(profile_picture_decoded)
+            profile_picture_file.seek(0, io.SEEK_END)
+            file_size = profile_picture_file.tell()
+            if file_size > 3 * 1024 * 1024:
+                raise ValueError("Profile picture file size must not exceed 2MB")
+        return profile_picture
 
 
 class UpdateApplicantExperienceDTO(BaseModel):

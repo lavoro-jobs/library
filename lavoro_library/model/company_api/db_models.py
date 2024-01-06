@@ -38,8 +38,20 @@ class RecruiterProfile(BaseModel):
     company_id: uuid.UUID
     first_name: str
     last_name: str
+    profile_picture: Union[bytes, str, None] = None
     company_id: Union[uuid.UUID, None] = None
     recruiter_role: RecruiterRole = RecruiterRole.admin
+
+    @field_serializer("profile_picture")
+    @classmethod
+    def serialize_profile_picture(cls, profile_picture):
+        if profile_picture:
+            if isinstance(profile_picture, str):
+                return profile_picture
+            else:
+                return base64.b64encode(profile_picture).decode("utf-8")
+        else:
+            return None
 
 
 class InviteToken(BaseModel):
