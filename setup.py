@@ -13,8 +13,11 @@ setup(
     packages=["lavoro_library"],
     install_requires=[
         "pydantic[email]",
-        "psycopg",
+        "psycopg[binary]",
         "python-multipart",
+        "jsonpickle",
+        "pika",
+        "fastapi",
     ],
     zip_safe=False,
 )
