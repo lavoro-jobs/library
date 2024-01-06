@@ -1,5 +1,5 @@
 import os
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
     name="lavoro-library",
@@ -10,7 +10,7 @@ setup(
     author="Lavoro Team",
     author_email="marko.bolt@fer.hr",
     license="MIT",
-    packages=["lavoro_library"],
+    packages=find_packages(),
     install_requires=[
         "pydantic[email]",
         "psycopg[binary]",
