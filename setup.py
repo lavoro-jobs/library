@@ -18,6 +18,7 @@ setup(
         "jsonpickle",
         "pika",
         "fastapi",
+        "fastapi-mail",
     ],
     zip_safe=False,
 )
