@@ -103,7 +103,7 @@ class CreateRecruiterProfileDTO(BaseModel):
             profile_picture_file.seek(0, io.SEEK_END)
             file_size = profile_picture_file.tell()
             if file_size > 3 * 1024 * 1024:
-                raise ValueError("Profile picture file size must not exceed 2MB")
+                raise ValueError("Profile picture file size must not exceed 3MB")
         return profile_picture
 
 
@@ -123,7 +123,7 @@ class UpdateRecruiterProfileDTO(BaseModel):
             profile_picture_file.seek(0, io.SEEK_END)
             file_size = profile_picture_file.tell()
             if file_size > 3 * 1024 * 1024:
-                raise ValueError("Profile picture file size must not exceed 2MB")
+                raise ValueError("Profile picture file size must not exceed 3MB")
         return profile_picture
 
 
