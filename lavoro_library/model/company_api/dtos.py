@@ -5,7 +5,7 @@ import uuid
 from datetime import datetime, timezone
 from typing import List, Union
 
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, validator, field_serializer
 from lavoro_library.model.api_gateway.dtos import ContractTypeDTO, EducationLevelDTO, PositionDTO, SkillDTO, WorkTypeDTO
 
 from lavoro_library.model.company_api.db_models import RecruiterProfile, RecruiterRole
@@ -16,6 +16,7 @@ class RecruiterProfileDTO(BaseModel):  # RecruiterProfileWithCompanyName
     account_id: uuid.UUID
     first_name: str
     last_name: str
+    profile_picture: Union[str, None] = None
     company_id: Union[uuid.UUID, None] = None
     recruiter_role: RecruiterRole
 
@@ -24,8 +25,20 @@ class RecruiterProfileWithCompanyNameDTO(BaseModel):
     account_id: uuid.UUID
     first_name: str
     last_name: str
+    profile_picture: Union[bytes, str, None] = None
     company_name: Union[str, None] = None
     recruiter_role: RecruiterRole
+    
+    @field_serializer("profile_picture")
+    @classmethod
+    def serialize_profile_picture(cls, profile_picture):
+        if profile_picture:
+            if isinstance(profile_picture, str):
+                return profile_picture
+            else:
+                return base64.b64encode(profile_picture).decode("utf-8")
+        else:
+            return None
 
 
 class CompanyDTO(BaseModel):
@@ -76,12 +89,42 @@ class CreateCompanyDTO(BaseModel):
 class CreateRecruiterProfileDTO(BaseModel):
     first_name: str
     last_name: str
+    profile_picture: Union[str, None] = None
     company_id: Union[uuid.UUID, None] = None
+
+    @validator("profile_picture")
+    def check_properties(cls, profile_picture):
+        if profile_picture:
+            try:
+                profile_picture_decoded = base64.b64decode(profile_picture)
+            except Exception:
+                raise ValueError("Invalid file")
+            profile_picture_file = io.BytesIO(profile_picture_decoded)
+            profile_picture_file.seek(0, io.SEEK_END)
+            file_size = profile_picture_file.tell()
+            if file_size > 3 * 1024 * 1024:
+                raise ValueError("Profile picture file size must not exceed 3MB")
+        return profile_picture
 
 
 class UpdateRecruiterProfileDTO(BaseModel):
     first_name: Union[str, None] = None
     last_name: Union[str, None] = None
+    profile_picture: Union[str, None] = None
+
+    @validator("profile_picture")
+    def check_properties(cls, profile_picture):
+        if profile_picture:
+            try:
+                profile_picture_decoded = base64.b64decode(profile_picture)
+            except Exception:
+                raise ValueError("Invalid file")
+            profile_picture_file = io.BytesIO(profile_picture_decoded)
+            profile_picture_file.seek(0, io.SEEK_END)
+            file_size = profile_picture_file.tell()
+            if file_size > 3 * 1024 * 1024:
+                raise ValueError("Profile picture file size must not exceed 3MB")
+        return profile_picture
 
 
 class InviteTokenDTO(BaseModel):
