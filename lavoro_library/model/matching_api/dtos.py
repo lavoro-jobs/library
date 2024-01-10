@@ -53,3 +53,4 @@ class ApplicationDTO(BaseModel):
     applicant: Union[ApplicantProfileDTO, None] = None
     comments: Union[List[CommentDTO], None] = None
     applicant_stream_chat_token: Union[str, None] = None
+    assignees_stream_chat_tokens: Union[List[str], None] = None
